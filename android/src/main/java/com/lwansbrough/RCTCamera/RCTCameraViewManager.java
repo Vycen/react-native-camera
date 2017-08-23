@@ -55,6 +55,11 @@ public class RCTCameraViewManager extends ViewGroupManager<RCTCameraView> {
         view.setTorchMode(torchMode);
     }
 
+    @ReactProp(name = "zoom")
+    public void setZoom(RCTCameraView view, int zoom) {
+        view.setZoom(zoom);
+    }
+
     @ReactProp(name = "flashMode")
     public void setFlashMode(RCTCameraView view, int flashMode) {
         view.setFlashMode(flashMode);

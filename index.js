@@ -32,6 +32,10 @@ function convertNativeProps(props) {
     newProps.torchMode = Camera.constants.TorchMode[props.torchMode];
   }
 
+  if (typeof props.zoom === 'number') {
+    newProps.zoom = props.zoom;
+  }
+
   if (typeof props.type === 'string') {
     newProps.type = Camera.constants.Type[props.type];
   }
@@ -113,6 +117,7 @@ export default class Camera extends Component {
       PropTypes.string,
       PropTypes.number
     ]),
+    zoom: PropTypes.number,
     type: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
@@ -132,6 +137,7 @@ export default class Camera extends Component {
     flashMode: CameraManager.FlashMode.off,
     playSoundOnCapture: true,
     torchMode: CameraManager.TorchMode.off,
+    zoom: 0,
     mirrorImage: false,
     barCodeTypes: Object.values(CameraManager.BarCodeType),
   };

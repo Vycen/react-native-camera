@@ -319,6 +319,26 @@ public class RCTCamera {
         }
     }
 
+    public void setZoom(int cameraType, int zoom) {
+        Camera camera = this.acquireCameraInstance(cameraType);
+        if (null == camera) {
+            return;
+        }
+
+        Camera.Parameters parameters = camera.getParameters();
+        int maxZoom = parameters.getMaxZoom();
+        if (parameters.isZoomSupported()) {
+            System.out.println("MAX ZOOM ==== " + maxZoom);
+            System.out.println("ZOOM ==== " + zoom);
+            if (zoom >=0 && zoom < maxZoom) {
+                parameters.setZoom(zoom);
+                camera.setParameters(parameters);
+            } else {
+                return;
+            }
+        }
+    }
+
     public void setFlashMode(int cameraType, int flashMode) {
         Camera camera = this.acquireCameraInstance(cameraType);
         if (null == camera) {
