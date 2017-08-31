@@ -28,6 +28,10 @@
         self.motionManager.accelerometerUpdateInterval = 0.2;
         self.motionManager.gyroUpdateInterval = 0.2;
         self.orientationCallback = nil;
+        self.actualOrientation = UIInterfaceOrientationLandscapeLeft;
+        self.actualAVCaptureVideoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+        self.orientation = UIInterfaceOrientationLandscapeLeft;
+        
     }
     return self;
 }
@@ -72,15 +76,23 @@
 - (UIInterfaceOrientation)getOrientationBy:(CMAcceleration)acceleration
 {
     if(acceleration.x >= 0.75) {
-        return UIInterfaceOrientationLandscapeLeft;
+        self.actualOrientation = UIInterfaceOrientationLandscapeLeft;
+        return self.actualOrientation;
     }
     if(acceleration.x <= -0.75) {
-        return UIInterfaceOrientationLandscapeRight;
+        self.actualOrientation = UIInterfaceOrientationLandscapeRight;
+        return self.actualOrientation;
     }
     if(acceleration.y <= -0.75) {
+        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+            return self.actualOrientation;
+        }
         return UIInterfaceOrientationPortrait;
     }
     if(acceleration.y >= 0.75) {
+        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+            return self.actualOrientation;
+        }
         return UIInterfaceOrientationPortraitUpsideDown;
     }
     return [[UIApplication sharedApplication] statusBarOrientation];
@@ -90,15 +102,26 @@
 {
     switch (orientation) {
         case UIInterfaceOrientationPortrait:
+            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                return self.actualAVCaptureVideoOrientation;
+            }
             return AVCaptureVideoOrientationPortrait;
         case UIInterfaceOrientationPortraitUpsideDown:
+            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                return self.actualAVCaptureVideoOrientation;
+            }
             return AVCaptureVideoOrientationPortraitUpsideDown;
         case UIInterfaceOrientationLandscapeLeft:
-            return AVCaptureVideoOrientationLandscapeLeft;
+            self.actualAVCaptureVideoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+            return self.actualAVCaptureVideoOrientation;
         case UIInterfaceOrientationLandscapeRight:
-            return AVCaptureVideoOrientationLandscapeRight;
+            self.actualAVCaptureVideoOrientation = AVCaptureVideoOrientationLandscapeRight;
+            return self.actualAVCaptureVideoOrientation;
         default:
-            return 0; // unknown
+            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+                return self.actualAVCaptureVideoOrientation;
+            }
+            return 0;
     }
 }
 
